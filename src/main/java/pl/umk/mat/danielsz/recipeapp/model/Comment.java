@@ -24,7 +24,7 @@ public class Comment extends BaseEntity {
     @NotBlank
     @Column(name = "rating")
     @Min(value = 1, message = "Value too low") @Max(value = 5, message = "Value too high")
-    private short rating;
+    private int rating;
 
     @NotBlank
     @Column(name = "date")

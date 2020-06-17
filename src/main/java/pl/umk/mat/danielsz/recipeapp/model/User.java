@@ -30,6 +30,6 @@ public class User extends BaseEntity{
     private String description;
 
     @Lob
-    @Column(name = "profile-picture")
+    @Column(name = "profile_picture")
     private String profilePicture;
 }
