@@ -13,13 +13,13 @@ import javax.persistence.Table;
 @Data @NoArgsConstructor
 public class User extends BaseEntity{
 
-    @Column(name = "login")
+    @Column(name = "login", unique = true)
     private String login;
 
     @Column(name = "password")
     private String password;
 
-    @Column(name = "mail")
+    @Column(name = "mail", unique = true)
     private String mail;
 
     @Lob
