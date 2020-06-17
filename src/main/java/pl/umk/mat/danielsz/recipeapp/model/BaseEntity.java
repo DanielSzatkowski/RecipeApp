@@ -6,8 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @MappedSuperclass
-@Getter
-@Setter
+@Getter @Setter
 public class BaseEntity {
 
     @Id

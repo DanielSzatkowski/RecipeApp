@@ -1,6 +1,9 @@
 package pl.umk.mat.danielsz.recipeapp.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -8,6 +11,8 @@ import java.util.Date;
 
 @Entity
 @Table(name = "recipes")
+@NoArgsConstructor
+@Setter @Getter
 public class Recipe extends BaseEntity {
 
     @NotBlank

@@ -1,6 +1,9 @@
 package pl.umk.mat.danielsz.recipeapp.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -10,7 +13,9 @@ import java.util.Date;
 
 @Entity
 @Table(name = "comments")
-public class Comment {
+@NoArgsConstructor
+@Setter @Getter
+public class Comment extends BaseEntity {
 
     @NotBlank
     @Column(name = "content")

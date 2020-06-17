@@ -1,7 +1,9 @@
 package pl.umk.mat.danielsz.recipeapp.model;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +13,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "user")
 @Data @NoArgsConstructor
+@Setter @Getter
 public class User extends BaseEntity{
 
     @Column(name = "login", unique = true)
