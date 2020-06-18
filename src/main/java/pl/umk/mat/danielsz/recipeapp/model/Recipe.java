@@ -35,7 +35,7 @@ public class Recipe extends BaseEntity {
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date creationDate;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_fk")
     private User user = new User();
 }

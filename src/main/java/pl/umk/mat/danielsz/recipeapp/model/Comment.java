@@ -31,4 +31,8 @@ public class Comment extends BaseEntity {
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date creationDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_fk")
+    private User user = new User();
 }
