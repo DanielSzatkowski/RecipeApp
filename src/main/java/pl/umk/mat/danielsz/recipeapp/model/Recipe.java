@@ -39,7 +39,7 @@ public class Recipe extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_fk")
-    private User user = new User();
+    private User user;
 
     @OneToMany(mappedBy = "recipe")
     private List<Comment> comments = new ArrayList<>();
