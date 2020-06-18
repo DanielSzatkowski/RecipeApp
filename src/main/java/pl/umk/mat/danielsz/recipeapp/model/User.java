@@ -5,10 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -32,4 +31,10 @@ public class User extends BaseEntity{
     @Lob
     @Column(name = "profile_picture")
     private String profilePicture;
+
+    @ManyToMany
+    @JoinTable(name = "users_roles",
+        joinColumns = { @JoinColumn(name = "user_fk") },
+        inverseJoinColumns = { @JoinColumn(name = "role_fk") })
+    private Set<Role> roles = new HashSet<>();
 }
