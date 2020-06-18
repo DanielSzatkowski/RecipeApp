@@ -1,4 +1,7 @@
 package pl.umk.mat.danielsz.recipeapp.repositories;
 
-public interface CommentRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import pl.umk.mat.danielsz.recipeapp.model.Comment;
+
+public interface CommentRepository extends JpaRepository<Comment, Long> {
 }
