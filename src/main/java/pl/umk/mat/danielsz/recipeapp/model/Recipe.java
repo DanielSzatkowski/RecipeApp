@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -33,5 +34,9 @@ public class Recipe extends BaseEntity {
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date creationDate;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_fk")
+    private User user = new User();
 }
 
