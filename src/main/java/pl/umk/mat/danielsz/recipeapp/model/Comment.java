@@ -35,7 +35,7 @@ public class Comment extends BaseEntity {
     private Date creationDate;
 
     @JsonManagedReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_fk")
     private User user;
 
