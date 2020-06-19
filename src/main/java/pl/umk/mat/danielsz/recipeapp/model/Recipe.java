@@ -1,6 +1,7 @@
 package pl.umk.mat.danielsz.recipeapp.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,13 +35,15 @@ public class Recipe extends BaseEntity {
     @NotBlank
     @Column(name = "date")
     @Temporal(TemporalType.DATE)
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date creationDate;
 
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_fk")
     private User user;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "recipe")
     private List<Comment> comments = new ArrayList<>();
 }
