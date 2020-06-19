@@ -1,6 +1,7 @@
 package pl.umk.mat.danielsz.recipeapp.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,8 +44,8 @@ public class Recipe extends BaseEntity {
     @JoinColumn(name = "user_fk")
     private User user;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "recipe")
+    @JsonIgnore
+    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 }
 

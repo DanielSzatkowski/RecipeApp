@@ -1,9 +1,14 @@
 package pl.umk.mat.danielsz.recipeapp.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.umk.mat.danielsz.recipeapp.model.Recipe;
 import pl.umk.mat.danielsz.recipeapp.repositories.RecipeRepository;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -14,5 +19,35 @@ public class RecipeService {
     @Autowired
     public RecipeService(RecipeRepository recipeRepository){
         this.recipeRepository = recipeRepository;
+    }
+
+    public Page<Recipe> getAll(Pageable pageable) {
+        Page<Recipe> resultRecipes = recipeRepository.findAllFetchUsers(pageable);
+
+        if(pageable.getPageNumber() > resultRecipes.getTotalPages()){
+            //TODO: ERROR page > total pages
+        } else if(resultRecipes.isEmpty()){
+            //TODO: ERROR empty return
+        }
+
+        return resultRecipes;
+    }
+
+    public Page<Recipe> getAllByName(String name, Pageable pageable) {
+        Page<Recipe> resultRecipes = recipeRepository.getAllByName(name, pageable);
+
+        if(pageable.getPageNumber() > resultRecipes.getTotalPages()){
+            //TODO: ERROR page > total pages
+        } else if(resultRecipes.isEmpty()){
+            //TODO: ERROR empty return
+        }
+
+        return resultRecipes;
+    }
+
+    public Page<Recipe> getAllByUserId(Long id, Pageable pageable) {
+        Page<Recipe> resultRecipes = recipeRepository.findAllByUserId(id, pageable);
+
+        return resultRecipes;
     }
 }
