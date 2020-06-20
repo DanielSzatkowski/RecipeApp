@@ -2,21 +2,32 @@ package pl.umk.mat.danielsz.recipeapp.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import pl.umk.mat.danielsz.recipeapp.security.SecurityConst;
+import pl.umk.mat.danielsz.recipeapp.security.filters.JwtUserAuthenticationFilter;
+import pl.umk.mat.danielsz.recipeapp.security.filters.JwtUserAuthorizationFilter;
+import pl.umk.mat.danielsz.recipeapp.services.UserService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
+    private final SecurityConst securityConst;
+    private final UserService userService;
 
     @Autowired
-    public SecurityConfiguration(UserDetailsService userDetailsService){
+    public SecurityConfiguration(UserDetailsService userDetailsService, SecurityConst securityConst,
+                                 UserService userService){
+
         this.userDetailsService = userDetailsService;
+        this.securityConst = securityConst;
+        this.userService = userService;
     }
 
     @Override
@@ -31,6 +42,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .cors()
                 .and()
             .csrf().disable()   //TODO: csrf enable
+            .addFilter(new JwtUserAuthenticationFilter(authenticationManager(), securityConst))
+            .addFilter(new JwtUserAuthorizationFilter(authenticationManager(), securityConst, userService))
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.headers().frameOptions().disable();
