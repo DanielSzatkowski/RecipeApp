@@ -24,4 +24,22 @@ public class Role extends BaseEntity {
     public int hashCode(){
         return 20;
     }
+
+    @Override
+    public boolean equals(Object obj){
+        if(this == obj){
+            return true;
+        }
+
+        if(obj == null){
+            return false;
+        }
+
+        if(this.getClass() != obj.getClass()){
+            return false;
+        }
+
+        Role other = (Role) obj;
+        return (id != null && id.equals(other.getId()));
+    }
 }

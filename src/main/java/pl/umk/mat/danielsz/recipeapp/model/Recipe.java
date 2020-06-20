@@ -52,5 +52,23 @@ public class Recipe extends BaseEntity {
     public int hashCode(){
         return 30;
     }
+
+    @Override
+    public boolean equals(Object obj){
+        if(this == obj){
+            return true;
+        }
+
+        if(obj == null){
+            return false;
+        }
+
+        if(this.getClass() != obj.getClass()){
+            return false;
+        }
+
+        Recipe other = (Recipe) obj;
+        return (id != null && id.equals(other.getId()));
+    }
 }
 

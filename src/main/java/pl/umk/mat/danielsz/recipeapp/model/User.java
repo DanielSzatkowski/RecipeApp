@@ -56,4 +56,22 @@ public class User extends BaseEntity{
     public int hashCode(){
         return 10;
     }
+
+    @Override
+    public boolean equals(Object obj){
+        if(this == obj){
+            return true;
+        }
+
+        if(obj == null){
+            return false;
+        }
+
+        if(this.getClass() != obj.getClass()){
+            return false;
+        }
+
+        User other = (User) obj;
+        return (id != null && id.equals(other.getId()));
+    }
 }

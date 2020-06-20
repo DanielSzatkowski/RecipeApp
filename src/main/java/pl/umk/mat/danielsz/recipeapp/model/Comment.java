@@ -49,4 +49,22 @@ public class Comment extends BaseEntity {
     public int hashCode(){
         return 40;
     }
+
+    @Override
+    public boolean equals(Object obj){
+        if(this == obj){
+            return true;
+        }
+
+        if(obj == null){
+            return false;
+        }
+
+        if(this.getClass() != obj.getClass()){
+            return false;
+        }
+
+        Comment other = (Comment) obj;
+        return (id != null && id.equals(other.getId()));
+    }
 }
