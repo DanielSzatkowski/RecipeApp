@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -51,6 +53,16 @@ public class User extends BaseEntity{
     @JsonBackReference
     @OneToMany(mappedBy = "user")
     private List<Comment> comments = new ArrayList<>();
+
+    public Set<GrantedAuthority> getGrantedAuthoritiesRoles(){
+        Set<GrantedAuthority> authSet = new HashSet<>();
+
+        for(Role role: this.getRoles()){
+            authSet.add(new SimpleGrantedAuthority(role.getName()));
+        }
+
+        return authSet;
+    }
 
     @Override
     public int hashCode(){
