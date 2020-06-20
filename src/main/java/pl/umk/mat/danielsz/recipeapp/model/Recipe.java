@@ -47,5 +47,10 @@ public class Recipe extends BaseEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
+
+    @Override
+    public int hashCode(){
+        return 30;
+    }
 }
 

@@ -44,4 +44,9 @@ public class Comment extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_fk")
     private Recipe recipe;
+
+    @Override
+    public int hashCode(){
+        return 40;
+    }
 }

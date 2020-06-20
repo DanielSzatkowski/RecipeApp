@@ -19,4 +19,9 @@ public class Role extends BaseEntity {
     @NotBlank
     @Column(name = "name", unique = true)
     private String name;
+
+    @Override
+    public int hashCode(){
+        return 20;
+    }
 }

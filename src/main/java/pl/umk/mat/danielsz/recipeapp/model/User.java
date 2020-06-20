@@ -51,4 +51,9 @@ public class User extends BaseEntity{
     @JsonBackReference
     @OneToMany(mappedBy = "user")
     private List<Comment> comments = new ArrayList<>();
+
+    @Override
+    public int hashCode(){
+        return 10;
+    }
 }
