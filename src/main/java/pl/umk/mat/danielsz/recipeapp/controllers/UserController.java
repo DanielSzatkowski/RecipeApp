@@ -2,11 +2,8 @@ package pl.umk.mat.danielsz.recipeapp.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import pl.umk.mat.danielsz.recipeapp.exceptions.NotFoundException;
 import pl.umk.mat.danielsz.recipeapp.model.User;
 import pl.umk.mat.danielsz.recipeapp.services.UserService;
-
-import java.util.Date;
 
 @RestController
 @RequestMapping("/api/users")
