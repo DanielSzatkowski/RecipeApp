@@ -55,6 +55,6 @@ public class JwtUserAuthenticationFilter extends UsernamePasswordAuthenticationF
                 .withExpiresAt(new Date(System.currentTimeMillis() + securityConst.getExpirationTime()))
                 .sign(Algorithm.HMAC512(securityConst.getSecret().getBytes()));
 
-        response.addHeader(securityConst.getHeader(), securityConst.getTokenPrefix());
+        response.addHeader(securityConst.getHeader(), securityConst.getTokenPrefix() + token);
     }
 }
