@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.umk.mat.danielsz.recipeapp.model.Comment;
+import pl.umk.mat.danielsz.recipeapp.model.Recipe;
+import pl.umk.mat.danielsz.recipeapp.model.User;
 import pl.umk.mat.danielsz.recipeapp.repositories.CommentRepository;
 
 @Service
@@ -13,10 +15,14 @@ import pl.umk.mat.danielsz.recipeapp.repositories.CommentRepository;
 public class CommentService {
 
     private final CommentRepository commentRepository;
+    private final UserService userService;
+    private final RecipeService recipeService;
 
     @Autowired
-    public CommentService(CommentRepository commentRepository){
+    public CommentService(CommentRepository commentRepository, UserService userService, RecipeService recipeService){
         this.commentRepository = commentRepository;
+        this.userService = userService;
+        this.recipeService = recipeService;
     }
 
     public Page<Comment> getUsersComments(Long id, Pageable pageable) {
@@ -41,5 +47,15 @@ public class CommentService {
         }
 
         return commentPage;
+    }
+
+    public Comment create(Comment commentToAdd, String userLogin, Long recipeId) {
+        User user = userService.getByLogin(userLogin);
+        Recipe recipe = recipeService.findOneById(recipeId);
+
+        commentToAdd.setUser(user);
+        commentToAdd.setRecipe(recipe);
+
+        return commentRepository.save(commentToAdd);
     }
 }

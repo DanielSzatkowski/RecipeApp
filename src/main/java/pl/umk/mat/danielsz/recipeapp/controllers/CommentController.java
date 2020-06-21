@@ -1,15 +1,18 @@
 package pl.umk.mat.danielsz.recipeapp.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.umk.mat.danielsz.recipeapp.model.Comment;
+import pl.umk.mat.danielsz.recipeapp.model.dto.CommentCreateDto;
 import pl.umk.mat.danielsz.recipeapp.services.CommentService;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -17,6 +20,12 @@ import java.util.List;
 public class CommentController {
 
     private final CommentService commentService;
+
+    private Comment dtoToComment(CommentCreateDto commentCreateDto) {
+        Comment comment = new ModelMapper().map(commentCreateDto, Comment.class);
+
+        return comment;
+    }
 
     @Autowired
     public CommentController(CommentService commentService) {
@@ -36,4 +45,17 @@ public class CommentController {
 
         return commentPage.getContent();
     }
+
+    @PostMapping("/recipe/{recipeId}")
+    public Comment postCommentForRecipe(@PathVariable Long recipeId, @RequestBody @Valid @NotNull CommentCreateDto commentCreateDto,
+                                        Principal principal) {
+
+        String userLogin = principal.getName();
+        Comment commentToAdd = dtoToComment(commentCreateDto);
+
+        return commentService.create(commentToAdd, userLogin, recipeId);
+    }
+
+    //TODO: DELETE
+    //TODO: PUT
 }

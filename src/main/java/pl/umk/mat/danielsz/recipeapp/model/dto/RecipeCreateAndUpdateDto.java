@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 
 @Getter @Setter
 @NoArgsConstructor
-public class RecipePostDto {
+public class RecipeCreateAndUpdateDto {
 
     @NotBlank
     private String name;

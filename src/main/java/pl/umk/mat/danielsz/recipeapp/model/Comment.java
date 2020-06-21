@@ -24,12 +24,10 @@ public class Comment extends BaseEntity {
     @Column(name = "content")
     private String content;
 
-    @NotBlank
     @Column(name = "rating")
     @Min(value = 1, message = "Value too low") @Max(value = 5, message = "Value too high")
     private int rating;
 
-    @NotBlank
     @Column(name = "date")
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -66,5 +64,10 @@ public class Comment extends BaseEntity {
 
         Comment other = (Comment) obj;
         return (id != null && id.equals(other.getId()));
+    }
+
+    @PrePersist
+    public void prePersist() {
+        creationDate = new Date();
     }
 }

@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import pl.umk.mat.danielsz.recipeapp.model.Recipe;
 
+import java.util.Optional;
+
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     @Query(value = "SELECT r FROM Recipe r JOIN FETCH r.user WHERE UPPER(r.name) LIKE CONCAT('%', UPPER(:name), '%')",
@@ -20,4 +22,6 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     @Query(value = "SELECT r FROM Recipe r JOIN FETCH r.user u",
             countQuery = "SELECT count(r) FROM Recipe r")
     Page<Recipe> findAllFetchUsers(Pageable pageable);
+
+    Optional<Recipe> findOneById(Long recipeId);
 }

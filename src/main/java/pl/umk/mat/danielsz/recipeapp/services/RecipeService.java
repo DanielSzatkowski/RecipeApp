@@ -5,11 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.umk.mat.danielsz.recipeapp.exceptions.NotFoundException;
 import pl.umk.mat.danielsz.recipeapp.model.Recipe;
 import pl.umk.mat.danielsz.recipeapp.model.User;
 import pl.umk.mat.danielsz.recipeapp.repositories.RecipeRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -59,5 +61,22 @@ public class RecipeService {
 
         recipe.setUser(user);
         return recipeRepository.save(recipe);
+    }
+
+    public Recipe updateOrCreate(Long recipeId, Recipe recipeModifyInfo, String login) {
+        Optional<Recipe> recipeOptional = recipeRepository.findOneById(recipeId);
+
+        if(recipeOptional.isEmpty()){
+            return create(recipeModifyInfo, login);
+        } else {
+            recipeModifyInfo.setId(recipeId);
+
+            return recipeRepository.save(recipeModifyInfo);
+        }
+    }
+
+    public Recipe findOneById(Long recipeId) {
+        return recipeRepository.findOneById(recipeId)
+            .orElseThrow(() -> new NotFoundException("Recipe having specified id doesn't exist."));
     }
 }

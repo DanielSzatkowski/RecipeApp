@@ -1,13 +1,12 @@
 package pl.umk.mat.danielsz.recipeapp.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import pl.umk.mat.danielsz.recipeapp.model.Recipe;
-import pl.umk.mat.danielsz.recipeapp.model.dto.RecipePostDto;
+import pl.umk.mat.danielsz.recipeapp.model.dto.RecipeCreateAndUpdateDto;
 import pl.umk.mat.danielsz.recipeapp.services.RecipeService;
 
 import javax.validation.Valid;
@@ -21,8 +20,8 @@ public class RecipeController {
 
     private final RecipeService recipeService;
 
-    public Recipe dtoToRecipe(RecipePostDto recipePostDto){
-        Recipe recipe = new ModelMapper().map(recipePostDto, Recipe.class);
+    public Recipe dtoToRecipe(RecipeCreateAndUpdateDto recipeCreateAndUpdateDto){
+        Recipe recipe = new ModelMapper().map(recipeCreateAndUpdateDto, Recipe.class);
 
         return recipe;
     }
@@ -54,11 +53,20 @@ public class RecipeController {
     };
 
     @PostMapping
-    public Recipe create(@RequestBody @Valid @NotNull RecipePostDto recipePostDto, Principal principal) {
-        Recipe recipe = dtoToRecipe(recipePostDto);
+    public Recipe create(@RequestBody @Valid @NotNull RecipeCreateAndUpdateDto recipeCreateAndUpdateDto, Principal principal) {
+        Recipe recipeModifyInfo = dtoToRecipe(recipeCreateAndUpdateDto);
 
         String login = principal.getName();
 
-        return recipeService.create(recipe, login);
+        return recipeService.create(recipeModifyInfo, login);
+    }
+
+    @PutMapping("/{recipeId}")
+    public Recipe updateOrCreate(@PathVariable Long recipeId, @RequestBody @Valid @NotNull RecipeCreateAndUpdateDto recipeCreateAndUpdateDto, Principal principal){
+        Recipe recipeModifyInfo = dtoToRecipe(recipeCreateAndUpdateDto);
+
+        String login = principal.getName();
+
+        return recipeService.updateOrCreate(recipeId, recipeModifyInfo, login);
     }
 }
