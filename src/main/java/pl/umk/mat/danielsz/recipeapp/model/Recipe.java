@@ -29,11 +29,9 @@ public class Recipe extends BaseEntity {
     @Column(name = "decription")
     private String description;
 
-    @NotBlank
     @Column(name = "picture")
     private String picture;
 
-    @NotBlank
     @Column(name = "date")
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -47,6 +45,11 @@ public class Recipe extends BaseEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
+
+    @PrePersist
+    public void prePersist() {
+        this.creationDate = new Date();
+    }
 
     @Override
     public int hashCode(){

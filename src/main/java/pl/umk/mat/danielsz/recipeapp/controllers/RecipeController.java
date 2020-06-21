@@ -1,15 +1,18 @@
 package pl.umk.mat.danielsz.recipeapp.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.umk.mat.danielsz.recipeapp.model.Recipe;
+import pl.umk.mat.danielsz.recipeapp.model.dto.RecipePostDto;
 import pl.umk.mat.danielsz.recipeapp.services.RecipeService;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -17,6 +20,12 @@ import java.util.List;
 public class RecipeController {
 
     private final RecipeService recipeService;
+
+    public Recipe dtoToRecipe(RecipePostDto recipePostDto){
+        Recipe recipe = new ModelMapper().map(recipePostDto, Recipe.class);
+
+        return recipe;
+    }
 
     @Autowired
     public RecipeController(RecipeService recipeService){
@@ -43,4 +52,13 @@ public class RecipeController {
 
         return resultRepcipes.getContent();
     };
+
+    @PostMapping
+    public Recipe create(@RequestBody @Valid @NotNull RecipePostDto recipePostDto, Principal principal) {
+        Recipe recipe = dtoToRecipe(recipePostDto);
+
+        String login = principal.getName();
+
+        return recipeService.create(recipe, login);
+    }
 }

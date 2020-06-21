@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.umk.mat.danielsz.recipeapp.model.Recipe;
+import pl.umk.mat.danielsz.recipeapp.model.User;
 import pl.umk.mat.danielsz.recipeapp.repositories.RecipeRepository;
 
 import java.util.List;
@@ -15,10 +16,12 @@ import java.util.List;
 public class RecipeService {
 
     private final RecipeRepository recipeRepository;
+    private final UserService userService;
 
     @Autowired
-    public RecipeService(RecipeRepository recipeRepository){
+    public RecipeService(RecipeRepository recipeRepository, UserService userService){
         this.recipeRepository = recipeRepository;
+        this.userService = userService;
     }
 
     public Page<Recipe> getAll(Pageable pageable) {
@@ -49,5 +52,12 @@ public class RecipeService {
         Page<Recipe> resultRecipes = recipeRepository.findAllByUserId(id, pageable);
 
         return resultRecipes;
+    }
+
+    public Recipe create(Recipe recipe, String login) {
+        User user = userService.getByLogin(login);
+
+        recipe.setUser(user);
+        return recipeRepository.save(recipe);
     }
 }
