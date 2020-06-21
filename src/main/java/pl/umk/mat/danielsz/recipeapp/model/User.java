@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "user") //TODO: nieporzaek z tabelami w h2 trzeba zmienic user -> users [obecne sa dwie tabele tabela users pusta]
+@Table(name = "users")
 @Data @NoArgsConstructor
 @Setter @Getter
 public class User extends BaseEntity{
