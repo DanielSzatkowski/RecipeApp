@@ -5,10 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.umk.mat.danielsz.recipeapp.exceptions.UnauthorizedAccessException;
 import pl.umk.mat.danielsz.recipeapp.model.Comment;
 import pl.umk.mat.danielsz.recipeapp.model.Recipe;
 import pl.umk.mat.danielsz.recipeapp.model.User;
 import pl.umk.mat.danielsz.recipeapp.repositories.CommentRepository;
+
+import javax.validation.constraints.NotNull;
 
 @Service
 @Transactional
@@ -17,6 +20,15 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final UserService userService;
     private final RecipeService recipeService;
+
+    private void checkAuthorization(String userLogin, Long commentId){
+        User userByLogin = userService.getByLogin(userLogin);
+        User commentAuthor = userService.findCommentAuthorByCommentId(commentId);
+
+        if(!userByLogin.getId().equals(commentAuthor.getId())) {
+            throw new UnauthorizedAccessException("Access denied.");
+        }
+    }
 
     @Autowired
     public CommentService(CommentRepository commentRepository, UserService userService, RecipeService recipeService){
@@ -57,5 +69,11 @@ public class CommentService {
         commentToAdd.setRecipe(recipe);
 
         return commentRepository.save(commentToAdd);
+    }
+
+    public void deleteById(@NotNull Long commentId, String userLogin) {
+        checkAuthorization(userLogin, commentId);
+
+        commentRepository.deleteById(commentId);
     }
 }

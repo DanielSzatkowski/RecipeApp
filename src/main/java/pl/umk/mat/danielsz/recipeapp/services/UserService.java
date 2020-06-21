@@ -79,4 +79,9 @@ public class UserService {
 
         return userRepository.save(changedUser);
     }
+
+    public User findCommentAuthorByCommentId(Long commentId) {
+        return userRepository.findCommentAuthorByCommentId(commentId)
+            .orElseThrow(() -> new NotFoundException("Author of the specified comment was not found."));
+    }
 }

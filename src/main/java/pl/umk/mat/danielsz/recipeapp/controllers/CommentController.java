@@ -5,6 +5,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.umk.mat.danielsz.recipeapp.model.Comment;
 import pl.umk.mat.danielsz.recipeapp.model.dto.CommentCreateDto;
@@ -56,6 +58,12 @@ public class CommentController {
         return commentService.create(commentToAdd, userLogin, recipeId);
     }
 
-    //TODO: DELETE
-    //TODO: PUT
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<Void> delete(@PathVariable Long commentId, Principal principal){
+        String userLogin = principal.getName();
+
+        commentService.deleteById(commentId, userLogin);
+
+        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+    }
 }
