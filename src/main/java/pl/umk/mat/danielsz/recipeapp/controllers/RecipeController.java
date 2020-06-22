@@ -4,6 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.umk.mat.danielsz.recipeapp.model.Recipe;
 import pl.umk.mat.danielsz.recipeapp.model.dto.RecipeCreateAndUpdateDto;
@@ -68,5 +70,12 @@ public class RecipeController {
         String login = principal.getName();
 
         return recipeService.updateOrCreate(recipeId, recipeModifyInfo, login);
+    }
+
+    @DeleteMapping("/{recipeId}")
+    public ResponseEntity<Void> remove(@PathVariable Long recipeId){
+        recipeService.deleteById(recipeId);
+
+        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 }

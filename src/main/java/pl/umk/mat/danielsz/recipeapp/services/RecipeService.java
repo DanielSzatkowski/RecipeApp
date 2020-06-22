@@ -79,4 +79,8 @@ public class RecipeService {
         return recipeRepository.findOneById(recipeId)
             .orElseThrow(() -> new NotFoundException("Recipe having specified id doesn't exist."));
     }
+
+    public void deleteById(Long recipeId) {
+        recipeRepository.deleteById(recipeId);
+    }
 }
