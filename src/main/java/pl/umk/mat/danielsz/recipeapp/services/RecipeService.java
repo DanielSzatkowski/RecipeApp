@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import pl.umk.mat.danielsz.recipeapp.exceptions.NotFoundException;
 import pl.umk.mat.danielsz.recipeapp.exceptions.UnauthorizedAccessException;
+import pl.umk.mat.danielsz.recipeapp.model.Comment;
 import pl.umk.mat.danielsz.recipeapp.model.Recipe;
 import pl.umk.mat.danielsz.recipeapp.model.User;
 import pl.umk.mat.danielsz.recipeapp.repositories.RecipeRepository;
@@ -23,6 +24,14 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final UserService userService;
 
+    private void checkPaginationError(Pageable pageable, Page<Recipe> commentPage){
+        if(pageable.getPageNumber() > commentPage.getTotalPages()){
+            throw new NotFoundException("Page doesn't exist.");
+        } else if(commentPage.isEmpty()){
+            throw new NotFoundException("Recipes don't exist.");
+        }
+    }
+
     @Autowired
     public RecipeService(RecipeRepository recipeRepository, UserService userService){
         this.recipeRepository = recipeRepository;
@@ -32,11 +41,7 @@ public class RecipeService {
     public Page<Recipe> getAll(Pageable pageable) {
         Page<Recipe> resultRecipes = recipeRepository.findAllFetchUsers(pageable);
 
-        if(pageable.getPageNumber() > resultRecipes.getTotalPages()){
-            //TODO: ERROR page > total pages
-        } else if(resultRecipes.isEmpty()){
-            //TODO: ERROR empty return
-        }
+        checkPaginationError(pageable, resultRecipes);
 
         return resultRecipes;
     }
@@ -44,11 +49,7 @@ public class RecipeService {
     public Page<Recipe> getAllByName(String name, Pageable pageable) {
         Page<Recipe> resultRecipes = recipeRepository.getAllByName(name, pageable);
 
-        if(pageable.getPageNumber() > resultRecipes.getTotalPages()){
-            //TODO: ERROR page > total pages
-        } else if(resultRecipes.isEmpty()){
-            //TODO: ERROR empty return
-        }
+        checkPaginationError(pageable, resultRecipes);
 
         return resultRecipes;
     }

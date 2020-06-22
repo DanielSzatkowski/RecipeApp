@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.umk.mat.danielsz.recipeapp.exceptions.NotFoundException;
 import pl.umk.mat.danielsz.recipeapp.exceptions.UnauthorizedAccessException;
 import pl.umk.mat.danielsz.recipeapp.model.Comment;
 import pl.umk.mat.danielsz.recipeapp.model.Recipe;
@@ -30,6 +31,14 @@ public class CommentService {
         }
     }
 
+    private void checkPaginationError(Pageable pageable, Page<Comment> commentPage){
+        if(pageable.getPageNumber() > commentPage.getTotalPages()){
+            throw new NotFoundException("Page doesn't exist.");
+        } else if(commentPage.isEmpty()){
+            throw new NotFoundException("Comments don't exist.");
+        }
+    }
+
     @Autowired
     public CommentService(CommentRepository commentRepository, UserService userService, RecipeService recipeService){
         this.commentRepository = commentRepository;
@@ -40,11 +49,7 @@ public class CommentService {
     public Page<Comment> getUsersComments(Long id, Pageable pageable) {
         Page<Comment> commentPage = commentRepository.findAllByUserId(id, pageable);
 
-        if(pageable.getPageNumber() > commentPage.getTotalPages()){
-            //TODO: Error page > total Page
-        } else if(commentPage.isEmpty()){
-            //TODO: empty list retruned
-        }
+        checkPaginationError(pageable, commentPage);
 
         return commentPage;
     }
@@ -52,11 +57,7 @@ public class CommentService {
     public Page<Comment> getRecipesComments(Long id, Pageable pageable) {
         Page<Comment> commentPage = commentRepository.getAllByRecipeId(id, pageable);
 
-        if(pageable.getPageNumber() > commentPage.getTotalPages()){
-            //TODO: ERROR page >  total Page
-        } else if(commentPage.isEmpty()){
-            //TODO: ERROR empty return
-        }
+        checkPaginationError(pageable, commentPage);
 
         return commentPage;
     }

@@ -48,24 +48,23 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(exception, responseError, httpHeaders, httpStatus, webRequest);
     }
 
-
-    //TODO: handle... merge to one method
     private ResponseEntity<Object> handleOperationNotAllowedException(OperationNotAllowedException exception, HttpHeaders httpHeaders,
-          HttpStatus httpStatus, WebRequest webRequest) {
+                                                                      HttpStatus httpStatus, WebRequest webRequest) {
 
         ResponseError responseError = new ResponseError(httpStatus, exception.getMessage());
 
         return handleExceptionInternal(exception, responseError, httpHeaders, httpStatus, webRequest);
     }
 
-    protected ResponseEntity<Object> handleNotFoundException(NotFoundException exception, HttpHeaders httpHeaders, HttpStatus httpStatus, WebRequest webRequest) {
+    protected ResponseEntity<Object> handleNotFoundException(NotFoundException exception, HttpHeaders httpHeaders,
+                                                             HttpStatus httpStatus, WebRequest webRequest) {
         ResponseError responseError = new ResponseError(httpStatus, exception.getMessage());
 
         return handleExceptionInternal(exception, responseError, httpHeaders, httpStatus, webRequest);
     }
 
-    protected  ResponseEntity<Object> handleUnauthorizedAccessException(UnauthorizedAccessException exception, HttpHeaders httpHeaders,
-                                                                        HttpStatus httpStatus, WebRequest webRequest){
+    protected  ResponseEntity<Object> handleUnauthorizedAccessException(UnauthorizedAccessException exception,
+                                                                        HttpHeaders httpHeaders, HttpStatus httpStatus, WebRequest webRequest){
         ResponseError responseError = new ResponseError(httpStatus, exception.getMessage());
 
         return handleExceptionInternal(exception, responseError, httpHeaders, httpStatus, webRequest);

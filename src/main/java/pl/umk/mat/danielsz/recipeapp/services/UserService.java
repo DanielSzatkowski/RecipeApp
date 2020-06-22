@@ -63,7 +63,7 @@ public class UserService {
 
     public User getOneById(Long id) {
         User userResult =  userRepository.findById(id)
-                .orElseThrow();             //TODO: obsluga bledow
+                .orElseThrow(() -> new NotFoundException("User doesn't exist."));
 
         return userResult;
     }
