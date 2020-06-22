@@ -17,7 +17,8 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler({
         NotFoundException.class,
         OperationNotAllowedException.class,
-        UnauthorizedAccessException.class
+        UnauthorizedAccessException.class,
+        FileEncodingException.class
     })
     public ResponseEntity<Object> handle(Exception exception, WebRequest webRequest) throws Exception {
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -31,9 +32,20 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
         } else if (exception instanceof UnauthorizedAccessException){
             HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
             return handleUnauthorizedAccessException((UnauthorizedAccessException) exception, httpHeaders, httpStatus, webRequest);
+        } else if(exception instanceof FileEncodingException) {
+            HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            return handleFileEncodeingException((FileEncodingException) exception, httpHeaders, httpStatus, webRequest);
         } else {
             throw exception;
         }
+    }
+
+    private ResponseEntity<Object> handleFileEncodeingException(FileEncodingException exception, HttpHeaders httpHeaders,
+                                                                HttpStatus httpStatus, WebRequest webRequest) {
+
+        ResponseError responseError = new ResponseError(httpStatus, exception.getMessage());
+
+        return handleExceptionInternal(exception, responseError, httpHeaders, httpStatus, webRequest);
     }
 
 

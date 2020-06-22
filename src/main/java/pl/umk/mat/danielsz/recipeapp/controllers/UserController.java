@@ -3,6 +3,7 @@ package pl.umk.mat.danielsz.recipeapp.controllers;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pl.umk.mat.danielsz.recipeapp.model.User;
 import pl.umk.mat.danielsz.recipeapp.model.dto.UserPatchDto;
 import pl.umk.mat.danielsz.recipeapp.services.UserService;
@@ -42,5 +43,12 @@ public class UserController {
         String login = principal.getName();
 
         return userService.patch(login, user);
+    }
+
+    @PostMapping("/picture")
+    public User updatePicture(@RequestParam("file")MultipartFile file, Principal principal) {
+        String userLogin = principal.getName();
+
+        return userService.updatePicture(file, userLogin);
     }
 }

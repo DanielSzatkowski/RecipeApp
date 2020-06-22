@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import pl.umk.mat.danielsz.recipeapp.exceptions.NotFoundException;
 import pl.umk.mat.danielsz.recipeapp.exceptions.OperationNotAllowedException;
 import pl.umk.mat.danielsz.recipeapp.model.User;
 import pl.umk.mat.danielsz.recipeapp.repositories.UserRepository;
 import pl.umk.mat.danielsz.recipeapp.utils.AppContext;
+import pl.umk.mat.danielsz.recipeapp.utils.ImageUtil;
 
 import javax.validation.constraints.NotNull;
 
@@ -83,5 +85,15 @@ public class UserService {
     public User findCommentAuthorByCommentId(Long commentId) {
         return userRepository.findCommentAuthorByCommentId(commentId)
             .orElseThrow(() -> new NotFoundException("Author of the specified comment was not found."));
+    }
+
+    public User updatePicture(MultipartFile file, String userLogin) {
+        User user = getByLogin(userLogin);
+
+        ImageUtil imageUtil = new ImageUtil();
+        String imageEncoded = imageUtil.encodeFileToBase64(file);
+
+        user.setProfilePicture(imageEncoded);
+        return userRepository.save(user);
     }
 }
