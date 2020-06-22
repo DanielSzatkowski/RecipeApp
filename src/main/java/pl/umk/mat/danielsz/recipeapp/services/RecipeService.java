@@ -5,10 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import pl.umk.mat.danielsz.recipeapp.exceptions.NotFoundException;
+import pl.umk.mat.danielsz.recipeapp.exceptions.UnauthorizedAccessException;
 import pl.umk.mat.danielsz.recipeapp.model.Recipe;
 import pl.umk.mat.danielsz.recipeapp.model.User;
 import pl.umk.mat.danielsz.recipeapp.repositories.RecipeRepository;
+import pl.umk.mat.danielsz.recipeapp.utils.ImageUtil;
 
 import java.util.List;
 import java.util.Optional;
@@ -83,4 +86,20 @@ public class RecipeService {
     public void deleteById(Long recipeId) {
         recipeRepository.deleteById(recipeId);
     }
+
+    public Recipe updatePicture(MultipartFile image, Long recipeId, String userLogin) {
+        User reqOwner = userService.getByLogin(userLogin);
+        Recipe recipe = findOneById(recipeId);
+
+        if(recipe.getUser().getId().equals(reqOwner.getId())){
+            ImageUtil imageUtil = new ImageUtil();
+            String imageEncoded = imageUtil.encodeFileToBase64(image);
+
+            recipe.setPicture(imageEncoded);
+            return recipeRepository.save(recipe);
+        } else {
+            throw new UnauthorizedAccessException("Access denied.");
+        }
+    }
+
 }

@@ -3,6 +3,7 @@ package pl.umk.mat.danielsz.recipeapp.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,8 +38,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
             .antMatchers("/api/**").authenticated()
-            .antMatchers("/h2").permitAll()     //TODO: return to antMatchers
+            .antMatchers("/h2").permitAll()
             .antMatchers("/login").permitAll()
+            .antMatchers(HttpMethod.POST, "/registration").permitAll()
             .antMatchers("/actuator/**").hasRole("ADMIN")
                 .and()
             .httpBasic()

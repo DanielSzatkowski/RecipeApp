@@ -96,4 +96,8 @@ public class UserService {
         user.setProfilePicture(imageEncoded);
         return userRepository.save(user);
     }
+
+    public boolean existsByLogin(String login) {
+        return userRepository.existsByLogin(login);
+    }
 }

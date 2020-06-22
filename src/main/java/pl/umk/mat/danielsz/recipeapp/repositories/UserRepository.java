@@ -18,4 +18,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u JOIN u.comments c WHERE c.id = :commentId")
     Optional<User> findCommentAuthorByCommentId(@Param(value = "commentId") Long commentId);
+
+    boolean existsByLogin(String login);
 }

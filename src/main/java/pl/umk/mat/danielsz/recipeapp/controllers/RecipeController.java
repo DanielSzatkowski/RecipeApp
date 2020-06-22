@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pl.umk.mat.danielsz.recipeapp.model.Recipe;
 import pl.umk.mat.danielsz.recipeapp.model.dto.RecipeCreateAndUpdateDto;
 import pl.umk.mat.danielsz.recipeapp.services.RecipeService;
@@ -61,6 +62,13 @@ public class RecipeController {
         String login = principal.getName();
 
         return recipeService.create(recipeModifyInfo, login);
+    }
+
+    @PostMapping("/{recipeId}/picture")
+    public Recipe updatepicture(@RequestParam("file") MultipartFile image, @PathVariable Long recipeId, Principal principal) {
+        String userLogin = principal.getName();
+
+        return recipeService.updatePicture(image, recipeId, userLogin);
     }
 
     @PutMapping("/{recipeId}")

@@ -29,6 +29,7 @@ public class Recipe extends BaseEntity {
     @Column(name = "decription")
     private String description;
 
+    @Lob
     @Column(name = "picture")
     private String picture;
 

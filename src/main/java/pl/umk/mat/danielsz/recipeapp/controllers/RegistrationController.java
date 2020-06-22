@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import pl.umk.mat.danielsz.recipeapp.exceptions.OperationNotAllowedException;
 import pl.umk.mat.danielsz.recipeapp.model.Role;
 import pl.umk.mat.danielsz.recipeapp.model.User;
 import pl.umk.mat.danielsz.recipeapp.model.dto.UserRegistrationDto;
@@ -30,7 +31,9 @@ public class RegistrationController  {
 
     @PostMapping("/registration")
     public User register(@RequestBody @Valid @NotNull UserRegistrationDto userRegistrationDto){
-        //TODO: chceck if unique mail and login
+        if(userService.existsByMail(userRegistrationDto.getMail()) || userService.existsByLogin(userRegistrationDto.getLogin())) {
+            throw new OperationNotAllowedException("Login or mail already in use.");
+        }
 
         User user = new ModelMapper().map(userRegistrationDto, User.class);
 
