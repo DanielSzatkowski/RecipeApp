@@ -13,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
 import pl.umk.mat.danielsz.recipeapp.security.SecurityConst;
 import pl.umk.mat.danielsz.recipeapp.security.filters.JwtUserAuthenticationFilter;
 import pl.umk.mat.danielsz.recipeapp.security.filters.JwtUserAuthorizationFilter;
@@ -36,7 +37,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http.cors()
+            .configurationSource(request -> {
+                CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
+                corsConfiguration.addExposedHeader("Authorization");
+                return corsConfiguration;
+            })
+                .and()
+            .authorizeRequests()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/h2").permitAll()
             .antMatchers("/login").permitAll()
@@ -44,8 +52,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/actuator/**").hasRole("ADMIN")
                 .and()
             .httpBasic()
-                .and()
-            .cors()
                 .and()
             .csrf().disable()   //TODO: csrf enable
             .addFilter(new JwtUserAuthenticationFilter(authenticationManager(), securityConst))
