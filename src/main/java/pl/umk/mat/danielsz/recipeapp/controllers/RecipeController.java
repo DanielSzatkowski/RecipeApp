@@ -35,17 +35,17 @@ public class RecipeController {
     }
 
     @GetMapping
-    public List<Recipe> getAll(Pageable pageable) {
+    public Page<Recipe> getAll(Pageable pageable) {
         Page<Recipe> resultRecipes = recipeService.getAll(pageable);
 
-        return resultRecipes.getContent();
+        return resultRecipes;
     };
 
     @GetMapping("/{name}")
-    public List<Recipe> getAllByName(@PathVariable String name, Pageable pageable) {
+    public Page<Recipe> getAllByName(@PathVariable String name, Pageable pageable) {
         Page<Recipe> resultRecipes = recipeService.getAllByName(name, pageable);
 
-        return resultRecipes.getContent();
+        return resultRecipes;
     };
 
     @GetMapping("/user/{id}")

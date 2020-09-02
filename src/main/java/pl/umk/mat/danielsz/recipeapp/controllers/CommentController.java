@@ -35,17 +35,17 @@ public class CommentController {
     }
 
     @GetMapping("/user/{id}")
-    public List<Comment> getUsersComments(@PathVariable Long id, Pageable pageable) {
+    public Page<Comment> getUsersComments(@PathVariable Long id, Pageable pageable) {
         Page<Comment> commentPage = commentService.getUsersComments(id, pageable);
 
-        return commentPage.getContent();
+        return commentPage;
     }
 
     @GetMapping("recipe/{id}")
-    public List<Comment> getRecipesComments(@PathVariable Long id, Pageable pageable){
+    public Page<Comment> getRecipesComments(@PathVariable Long id, Pageable pageable){
         Page<Comment> commentPage = commentService.getRecipesComments(id, pageable);
 
-        return commentPage.getContent();
+        return commentPage;
     }
 
     @PostMapping("/recipe/{recipeId}")
